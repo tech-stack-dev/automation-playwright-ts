@@ -82,7 +82,7 @@ export default class BaseDriver {
             return baseElement.locator(selector);
         }
         else {
-            return driver.focusedDriver.locator(selector);
+            return driver.focusedDriver.Page.locator(selector);
         }
     }
 

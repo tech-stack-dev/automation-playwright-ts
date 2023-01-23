@@ -12,7 +12,7 @@ export default class BaseComponent implements Locator {
         this._page = page;
         this._parent = parent!;
     }
-
+    
     public get Element(): Locator {
         return this._element;
     }
@@ -43,6 +43,10 @@ export default class BaseComponent implements Locator {
 
     public set ComponentContext(context: string) {
         this._componentContext = context;
+    }
+
+    all(): Promise<Locator[]> {
+        return this.Element.all();
     }
 
     blur(options?: {

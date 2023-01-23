@@ -1,8 +1,8 @@
 import { ElementHandle, Page, Locator, JSHandle, LocatorScreenshotOptions, FrameLocator } from '@playwright/test'
 
 export default class BaseComponent implements Locator {
-    private _element: Locator;    
-    private _parent: Locator;    
+    private _element: Locator;
+    private _parent: Locator;
     private _page: Page;
     private _componentContext: string;
     protected identifier: string;
@@ -12,7 +12,7 @@ export default class BaseComponent implements Locator {
         this._page = page;
         this._parent = parent!;
     }
-    
+
     public get Element(): Locator {
         return this._element;
     }
@@ -24,7 +24,7 @@ export default class BaseComponent implements Locator {
     public get Parent(): Locator {
         return this._parent;
     }
-    
+
     public set Parent(value: Locator) {
         this._parent = value;
     }

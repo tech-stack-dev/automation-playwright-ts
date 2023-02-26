@@ -5,6 +5,10 @@ export default class UrlProvider {
         return <string>process.env.WEB_SITE_URL;
     }
 
+    public static careerUrl(): string{
+        return <string>process.env.CAREER_URL;
+    }
+
     public static clientUrl(clientName: ClientsEnum): string {
         switch (clientName) {
             case ClientsEnum.Client_1: {

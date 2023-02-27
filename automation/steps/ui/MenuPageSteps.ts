@@ -2,17 +2,21 @@ import { expect } from "@playwright/test";
 import MenuPage from "../../pages/MenuPage";
 import { driver } from "../../base/driver/Driver";
 
-export default class MenuPageSteps {
-    public static async openAndClosesMenu() {
+class MenuPageSteps {
+    public async openAndClosesMenu() {
         await (await driver.getPage(MenuPage)).clickOpenMenu();
         await (await driver.getPage(MenuPage)).clickCloseButton();
     }
 
-    public static async clickContactUsButton() {
+    public async clickContactUsButton() {
         await (await driver.getPage(MenuPage)).contactUsButton().click();
     }
 
-    public static async seeLogo() {
+    public async seeLogo() {
         await expect((await driver.getPage(MenuPage)).logo()).toBeVisible();
     }
 }
+
+var menuPageSteps = new MenuPageSteps();
+
+export { menuPageSteps };

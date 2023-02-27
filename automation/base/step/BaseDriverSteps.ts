@@ -1,7 +1,7 @@
 import { driver } from "../driver/Driver";
 import { BrowsersEnum } from "../driver/BrowsersEnum";
 
-export default class BaseDriverSteps {
+class BaseDriverSteps {
     public async createsNewBrowser(browserName: BrowsersEnum) {
         await driver.createBrowser(browserName);
     }
@@ -32,3 +32,7 @@ export default class BaseDriverSteps {
         await driver.Page.goto(url);
     }
 }
+
+var baseDriverSteps = new BaseDriverSteps();
+
+export { baseDriverSteps };

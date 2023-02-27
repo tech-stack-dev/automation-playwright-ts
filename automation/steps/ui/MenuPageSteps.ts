@@ -2,7 +2,7 @@ import { expect } from "@playwright/test";
 import MenuPage from "../../pages/MenuPage";
 import { driver } from "../../base/driver/Driver";
 
-export default class MenuPageSteps {
+class MenuPageSteps {
     public async openAndClosesMenu() {
         await (await driver.getPage(MenuPage)).clickOpenMenu();
         await (await driver.getPage(MenuPage)).clickCloseButton();
@@ -16,3 +16,7 @@ export default class MenuPageSteps {
         await expect((await driver.getPage(MenuPage)).logo()).toBeVisible();
     }
 }
+
+var menuPageSteps = new MenuPageSteps();
+
+export { menuPageSteps };

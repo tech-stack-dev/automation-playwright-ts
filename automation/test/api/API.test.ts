@@ -1,14 +1,12 @@
 import { test } from "@playwright/test";
 import { userDtoVariable } from "../../runtimeVariables/dto/UserDtoVariable";
-import ApiSteps from "../../steps/api/ApiSteps";
-import BaseApiSteps from "../../base/step/BaseApiSteps";
 import { ClientsEnum } from "../../base/client/ClientsEnum";
 import RequestOptions from "../../base/client/RequestOptions";
-
-let apiSteps: ApiSteps = new ApiSteps();
+import { apiSteps } from "../../steps/api/ApiSteps";
+import { baseApiSteps } from "../../base/step/BaseApiSteps";
 
 test.beforeEach(async () => {
-    await new BaseApiSteps().createClient(ClientsEnum.Client_1);
+    await baseApiSteps.createClient(ClientsEnum.Client_1);
 });
 
 test("Api test GET", async () => {

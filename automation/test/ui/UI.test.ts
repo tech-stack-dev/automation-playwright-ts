@@ -1,22 +1,19 @@
 import { test } from "@playwright/test";
 import { BrowsersEnum } from "../../base/driver/BrowsersEnum";
 import { driver } from "../../base/driver/Driver";
-import BaseDriverSteps from "../../base/step/BaseDriverSteps";
+import { baseDriverSteps } from "../../base/step/BaseDriverSteps";
 import ButtonById from "../../components/Button/ButtonById";
 import ModalWindowById from "../../components/ModalWindow/ModalWindowById";
 import Header from "../../identifiers/Header";
 import ModalMenu from "../../identifiers/ModalMenu";
+import NavigationTab from "../../identifiers/NavigationTab";
 import UrlProvider from "../../providers/UrlProvider";
-import ButtonSteps from "../../steps/components/Button/ButtonSteps";
-import MenuPageSteps from "../../steps/ui/MenuPageSteps";
-
-let baseActionSteps = new BaseDriverSteps();
-let menuPageSteps = new MenuPageSteps();
-let buttonSteps = new ButtonSteps();
+import { buttonSteps } from "../../steps/components/Button/ButtonSteps";
+import { menuPageSteps } from "../../steps/ui/MenuPageSteps";
 
 test.beforeEach(async () => {
-    await baseActionSteps.createsNewBrowser(BrowsersEnum.Browser_1);
-    await baseActionSteps.goToUrl(UrlProvider.webSiteUrl());
+    await baseDriverSteps.createsNewBrowser(BrowsersEnum.Browser_1);
+    await baseDriverSteps.goToUrl(UrlProvider.webSiteUrl());
 });
 
 test("Test example", async () => {
@@ -25,18 +22,18 @@ test("Test example", async () => {
 });
 
 test("Test example with 2 browsers and 2 pages", async () => {
-    await baseActionSteps.createsNewBrowser(BrowsersEnum.Browser_2);
-    await baseActionSteps.goToUrl(UrlProvider.webSiteUrl());
+    await baseDriverSteps.createsNewBrowser(BrowsersEnum.Browser_2);
+    await baseDriverSteps.goToUrl(UrlProvider.webSiteUrl());
 
     await menuPageSteps.openAndClosesMenu();
 
-    await baseActionSteps.createNewPage();
-    await baseActionSteps.goToUrl(UrlProvider.webSiteUrl());
+    await baseDriverSteps.createNewPage();
+    await baseDriverSteps.goToUrl(UrlProvider.webSiteUrl());
 
     await menuPageSteps.clickContactUsButton();
 
-    await baseActionSteps.switchToBrowser(BrowsersEnum.Browser_1);
-    await baseActionSteps.closeBrowser();
+    await baseDriverSteps.switchToBrowser(BrowsersEnum.Browser_1);
+    await baseDriverSteps.closeBrowser();
 });
 
 test("Test example with components", async () => {
@@ -44,6 +41,15 @@ test("Test example with components", async () => {
     
     let modalMenuComponent = await driver.component(ModalWindowById, ModalMenu.ModalMenu);
     await buttonSteps.clickButton(ButtonById, ModalMenu.CloseModalMenuButton, modalMenuComponent);
+});
+
+test("Test example with testIdAttribute", async () => {
+    await baseDriverSteps.goToUrl(UrlProvider.careerUrl());
+
+    await driver.getByTestId(NavigationTab.AboutUs).nth(0).click();
+    await driver.getByTestId(NavigationTab.Reviews).nth(0).click();
+    await driver.getByTestId(NavigationTab.ContactUs).nth(0).click();
+    await driver.getByTestId(NavigationTab.Jobs).nth(0).click();
 });
 
 test.afterEach(async () => {

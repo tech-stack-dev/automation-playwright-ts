@@ -35,6 +35,9 @@ jobs:
             if_true: ':red_circle:'
             if_false: ':large_green_circle:'
             
+      - name: Debug slack emoji
+        run: 'echo "Slack emoji result: ${{ steps.slack_icon_emoji.outputs.value }}"'
+            
       - name: Slack Notification
         if: always() 
         uses: rtCamp/action-slack-notify@v2.2.0

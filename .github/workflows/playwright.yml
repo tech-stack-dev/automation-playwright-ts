@@ -1,4 +1,4 @@
-name: Playwright UI E2E
+name: Playwright Tests
 
 on:
   workflow_dispatch:

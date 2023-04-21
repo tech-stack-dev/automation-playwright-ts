@@ -1,8 +1,10 @@
 name: Playwright UI E2E
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
+  schedule:
+  #Run each day at 22:10
+    - cron: '10 22 * * *'
   pull_request:
     branches: [ "main" ]
 
@@ -12,13 +14,41 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
       - uses: actions/setup-node@v3
+      
       - name: Install dependencies
         run: npm ci
+        
       - name: Install playwright browsers
         run: npx playwright install --with-deps
+        
       - name: Run tests
         run: npx playwright test
+        
+      - name: Preparing Slack emoji
+        uses: haya14busa/action-cond@v1
+        if: always() 
+        id: slack_icon_emoji
+        with:
+            cond: ${{ job.status == 'failure' }}
+            if_true: ':red_circle:'
+            if_false: ':large_green_circle:'
+            
+      - name: Slack Notification
+        if: always() 
+        uses: rtCamp/action-slack-notify@v2.2.0
+        env:
+            SLACK_USERNAME: Tests execution report
+            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+            SLACK_CHANNEL: autotest_boilerplates
+            SLACK_ICON_EMOJI: ${{ steps.slack_icon_emoji.outputs.value }}
+            SLACK_COLOR: ${{ job.status }}
+            SLACK_MESSAGE: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            SLACK_TITLE: TypeScript + Playwright
+            MSG_MINIMAL: true
+            SLACK_FOOTER: boilerplate
+        
       - uses: actions/upload-artifact@v3
         if: always()
         with:

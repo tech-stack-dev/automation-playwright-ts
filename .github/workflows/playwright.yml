@@ -32,8 +32,8 @@ jobs:
         id: slack_icon_emoji
         with:
             cond: ${{ job.status == 'failure' }}
-            if_true: ':red_circle:'
-            if_false: ':large_green_circle:'
+            if_true: ':finnadie:'
+            if_false: ':aw_yeah:'
             
       - name: Debug slack emoji
         run: 'echo "Slack emoji result: ${{ steps.slack_icon_emoji.outputs.value }}"'
@@ -45,7 +45,7 @@ jobs:
             SLACK_USERNAME: Tests execution report
             SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
             SLACK_CHANNEL: autotest_boilerplates
-            SLACK_ICON_EMOJI: ${{ steps.slack_icon_emoji.outputs.value }}
+            SLACK_ICON_EMOJI: :bell:
             SLACK_COLOR: ${{ job.status }}
             SLACK_MESSAGE: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
             SLACK_TITLE: TypeScript + Playwright

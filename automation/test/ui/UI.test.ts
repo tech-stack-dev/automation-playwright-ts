@@ -46,7 +46,7 @@ test("Test example with components", async () => {
 test("Test example with testIdAttribute", async () => {
     await baseDriverSteps.goToUrl(UrlProvider.careerUrl());
 
-    await driver.getByTestId(NavigationTab.AboutUs).nth(0).click();
+    await driver.getByTestId(NavigationTab.AboutUs).nth(10).click();
     await driver.getByTestId(NavigationTab.Reviews).nth(0).click();
     await driver.getByTestId(NavigationTab.ContactUs).nth(0).click();
     await driver.getByTestId(NavigationTab.Jobs).nth(0).click();

@@ -1,5 +1,6 @@
 import { driver } from "../driver/Driver";
 import { BrowsersEnum } from "../driver/BrowsersEnum";
+import BaseDriver from "../driver/BaseDriver";
 
 class BaseDriverSteps {
     public async createsNewBrowser(browserName: BrowsersEnum) {
@@ -13,7 +14,7 @@ class BaseDriverSteps {
     }
 
     public async switchToBrowser(browserName: BrowsersEnum) {
-        driver.focusedDriver = driver.listOfDrivers.find(x => x.DriverName === browserName)!;
+        BaseDriver.focusedDriver = BaseDriver.listOfDrivers.find(x => x.DriverName === browserName)!;
     }
 
     public async switchToBrowserTab(tabNumber: number) {

@@ -1,4 +1,5 @@
 import { client } from "../../base/client/Client";
+import BaseClient from "../client/BaseClient";
 import { ClientsEnum } from "../client/ClientsEnum";
 import ContextOptions from "../client/ContextOptions";
 
@@ -8,7 +9,7 @@ class BaseApiSteps {
     }
 
     public async switchToClient(clientName: ClientsEnum) {
-        client.focusedClient = client.listOfClients.find(x => x.ClientName === clientName)!;
+        BaseClient.focusedClient = BaseClient.listOfClients.find(x => x.ClientName === clientName)!;
     }
 }
 

@@ -4,37 +4,35 @@ import { BrowsersEnum } from "./BrowsersEnum";
 
 class Driver extends BaseDriver {
     public browser: Browser;
-    public focusedDriver: BaseDriver;
-    public listOfDrivers: BaseDriver[] = [];
 
     private headless: boolean = true;
 
     public async createBrowser(browserName: BrowsersEnum) {
-        driver.focusedDriver = new BaseDriver();
+        BaseDriver.focusedDriver = new BaseDriver();
 
         if (driver.browser === undefined) {
             // Uncomment if List of Chromium Commands needed
             driver.browser = await chromium.launch({ headless: this.headless /*, args: driver.driver.args*/ });
         }
 
-        driver.focusedDriver.DriverName = browserName;
-        driver.focusedDriver.DriverContext = await driver.browser.newContext();
+        BaseDriver.focusedDriver.DriverName = browserName;
+        BaseDriver.focusedDriver.DriverContext = await driver.browser.newContext();
         // Uncomment if permissions needed
         // await driver.driver.context.grantPermissions(driver.driver.permissions);
-        driver.focusedDriver.Page = await driver.focusedDriver.DriverContext.newPage();
-        driver.focusedDriver.ListOfPages.push(driver.focusedDriver.Page);
-        driver.listOfDrivers.push(driver.focusedDriver);
+        BaseDriver.focusedDriver.Page = await BaseDriver.focusedDriver.DriverContext.newPage();
+        BaseDriver.focusedDriver.ListOfPages.push(BaseDriver.focusedDriver.Page);
+        BaseDriver.listOfDrivers.push(BaseDriver.focusedDriver);
 
         return this;
     }
 
     public async closeDrivers() {
-        for (let driverToClose of this.listOfDrivers) {
-            driver.focusedDriver = driverToClose;
+        for (let driverToClose of BaseDriver.listOfDrivers) {
+            BaseDriver.focusedDriver = driverToClose;
             await this.DriverContext.close();
         }
 
-        driver.listOfDrivers = [];
+        BaseDriver.listOfDrivers = [];
     }
 }
 

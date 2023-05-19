@@ -1,36 +1,38 @@
 import { BrowserContext, Locator, Page } from '@playwright/test';
 import BaseComponent from '../component/BaseComponent';
-import { driver } from './Driver';
 import { BrowsersEnum } from './BrowsersEnum';
 
 export default class BaseDriver {
+    public static focusedDriver: BaseDriver;
+    public static listOfDrivers: BaseDriver[] = [];
+
     private _driverContext: BrowserContext;
     private _page: Page;
     private _listOfPages: Page[] = [];
     private _driverName: BrowsersEnum;
 
     public get DriverContext(): BrowserContext {
-        return driver.focusedDriver._driverContext;
+        return BaseDriver.focusedDriver._driverContext;
     }
 
     public set DriverContext(value: BrowserContext) {
-        driver.focusedDriver._driverContext = value;
+        BaseDriver.focusedDriver._driverContext = value;
     }
 
     public get Page(): Page {
-        return driver.focusedDriver._page;
+        return BaseDriver.focusedDriver._page;
     }
 
     public set Page(value: Page) {
-        driver.focusedDriver._page = value;
+        BaseDriver.focusedDriver._page = value;
     }
 
     public get ListOfPages(): Page[] {
-        return driver.focusedDriver._listOfPages;
+        return BaseDriver.focusedDriver._listOfPages;
     }
 
     public set ListOfPages(value: Page[]) {
-        driver.focusedDriver._listOfPages = value;
+        BaseDriver.focusedDriver._listOfPages = value;
     }
 
     public get DriverName(): BrowsersEnum {
@@ -48,23 +50,23 @@ export default class BaseDriver {
     private _args: string[];
 
     public get Permissions(): string[] {
-        return driver.focusedDriver._permissions;
+        return BaseDriver.focusedDriver._permissions;
     }
 
     public set Permissions(permissions: string[]) {
-        driver.focusedDriver._permissions = permissions;
+        BaseDriver.focusedDriver._permissions = permissions;
     }
 
     public get Args(): string[] {
-        return driver.focusedDriver._args;
+        return BaseDriver.focusedDriver._args;
     }
 
     public set Args(args: string[]) {
-        driver.focusedDriver._args = args;
+        BaseDriver.focusedDriver._args = args;
     }
 
     public async component<T extends BaseComponent>(type: { new(page: Page, identifier: string, parent: Locator | undefined): T; }, identifier: string, parent?: Locator): Promise<T> {
-        return await this.componentBuild(new type(driver.focusedDriver.Page, identifier, parent));
+        return await this.componentBuild(new type(BaseDriver.focusedDriver.Page, identifier, parent));
     }
 
     private async componentBuild<T extends BaseComponent>(component: T): Promise<T> {
@@ -82,15 +84,15 @@ export default class BaseDriver {
             return baseElement.locator(selector);
         }
         else {
-            return driver.focusedDriver.Page.locator(selector);
+            return BaseDriver.focusedDriver.Page.locator(selector);
         }
     }
 
     public getByTestId(testId: string): Locator {
-        return driver.Page.getByTestId(testId);
+        return this.Page.getByTestId(testId);
     }
 
     public async getPage<T>(type: { new(page: Page): T; }) {
-        return await new type(driver.focusedDriver.Page);
+        return await new type(BaseDriver.focusedDriver.Page);
     }
 }

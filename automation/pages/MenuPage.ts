@@ -2,7 +2,7 @@ import BasePage from "../base/page/BasePage";
 
 export default class MenuPage extends BasePage {
     public logo() {
-        return this.page.locator("//img[@id='logo-header']");
+        return this.page.locator("//div[@id='logo-header']");
     }
 
     public contactUsButton() {

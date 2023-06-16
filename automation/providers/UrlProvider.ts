@@ -1,8 +1,12 @@
 import { ClientsEnum } from "../base/client/ClientsEnum";
 
 export default class UrlProvider {
-    public static webSiteUrl(): string {
-        return <string>process.env.WEB_SITE_URL;
+    public static mainPageUrl(): string {
+        return <string>process.env.MAIN_PAGE_URL;
+    }
+
+    public static addUserPageUrl(): string {
+        return <string>process.env.ADD_USER_PAGE_URL;
     }
 
     public static careerUrl(): string{

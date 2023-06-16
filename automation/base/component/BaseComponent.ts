@@ -49,6 +49,10 @@ export default class BaseComponent implements Locator {
         return this.Element.or(locator);
     }
 
+    and(locator: Locator): Locator {
+        return this.Element.and(locator);
+    }
+
     all(): Promise<Locator[]> {
         return this.Element.all();
     }

@@ -92,7 +92,7 @@ export default class BaseDriver {
         return this.Page.getByTestId(testId);
     }
 
-    public async getPage<T>(type: { new(page: Page): T; }) {
-        return await new type(BaseDriver.focusedDriver.Page);
+    public getPage<T>(type: { new(page: Page): T; }) {
+        return new type(BaseDriver.focusedDriver.Page);
     }
 }

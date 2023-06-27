@@ -4,16 +4,16 @@ import { driver } from "../../base/driver/Driver";
 
 class MenuPageSteps {
     public async openAndClosesMenu() {
-        await (await driver.getPage(MenuPage)).clickOpenMenu();
-        await (await driver.getPage(MenuPage)).clickCloseButton();
+        await driver.getPage(MenuPage).clickOpenMenu();
+        await driver.getPage(MenuPage).clickCloseButton();
     }
 
     public async clickContactUsButton() {
-        await (await driver.getPage(MenuPage)).contactUsButton().click();
+        await driver.getPage(MenuPage).contactUsButton.click();
     }
 
     public async seeLogo() {
-        await expect((await driver.getPage(MenuPage)).logo()).toBeVisible();
+        await expect(driver.getPage(MenuPage).logo).toBeVisible();
     }
 }
 

@@ -1,24 +1,44 @@
-name: Playwright UI E2E
+name: Playwright Tests
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
+  schedule:
+  #Run each day at 22:10
+    - cron: '10 22 * * *'
   pull_request:
     branches: [ "main" ]
 
 jobs:
   tests_e2e:
-    name: Run end-to-end tests
+    name: UI and API tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      
       - uses: actions/setup-node@v3
+      
       - name: Install dependencies
         run: npm ci
+        
       - name: Install playwright browsers
         run: npx playwright install --with-deps
+        
       - name: Run tests
         run: npx playwright test
+            
+      - name: Slack Notification
+        if: failure()
+        uses: rtCamp/action-slack-notify@v2.2.0
+        env:
+            SLACK_USERNAME: Tests execution report
+            SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+            SLACK_CHANNEL: autotest_boilerplates
+            SLACK_COLOR: ${{ job.status }}
+            SLACK_MESSAGE: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+            SLACK_TITLE: TypeScript + Playwright
+            MSG_MINIMAL: true
+            SLACK_FOOTER: boilerplate
+        
       - uses: actions/upload-artifact@v3
         if: always()
         with:

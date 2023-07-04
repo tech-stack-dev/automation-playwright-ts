@@ -1,5 +1,5 @@
 import { ClientsEnum } from "../base/client/ClientsEnum";
-import appsetting from '../../appsetting.json';
+import appsetting from "../../appsetting.json";
 import UrlPath from "./UrlPath";
 
 export default class UrlProvider {
@@ -23,7 +23,7 @@ export default class UrlProvider {
                 return appsetting.Client_1_Url;
             }
             default: {
-                throw Error(`Unable to generate client URL for '${clientName}' brand`)
+                throw Error(`Unable to generate client URL for '${clientName}' brand`);
             }
         }
     }

@@ -60,11 +60,10 @@ test("Test example with testIdAttribute", async () => {
     await expect(driver.getByTestId(AddUserForm.NameValidationMessage)).toHaveText("Name is requried");
     await driver.getByTestId(Buttons.Cancel).click();
 
-    await expect(driver.getByTestId(Buttons.Delete).last()).toHaveCSS('background-color', 'rgb(220, 53, 69)');
+    await expect(driver.getByTestId(Buttons.Delete).last()).toHaveCSS("background-color", "rgb(220, 53, 69)");
 
     await driver.getByTestId(Buttons.Edit).nth(0).click();
     await driver.getByTestId(Buttons.Cancel).click();
-    
 });
 
 test.afterEach(async () => {

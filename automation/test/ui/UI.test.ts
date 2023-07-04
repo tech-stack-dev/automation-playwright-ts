@@ -5,62 +5,64 @@ import { baseDriverSteps } from "../../base/step/BaseDriverSteps";
 import ButtonByDataId from "../../components/Button/ButtonByDataId";
 import UrlProvider from "../../providers/UrlProvider";
 import { buttonSteps } from "../../steps/components/Button/ButtonSteps";
-import { mainPageSteps } from "../../steps/ui/MainPageSteps";
+import { homePageSteps } from "../../steps/ui/HomePageSteps";
 import { addUserPageSteps } from "../../steps/ui/AddUserPageSteps";
-import ActionButtons from "../../identifiers/buttons/ActionButtons";
+import Buttons from "../../identifiers/buttons/Buttons";
 import TableByDataId from "../../components/Table/TableByDataId";
-import MainTable from "../../identifiers/MainTable";
-import MainTableButtons from "../../identifiers/buttons/MainTableButtons";
+import UsersAndAddressesTable from "../../identifiers/tables/UsersAndAddressesTable";
 import AddUserForm from "../../identifiers/forms/AddUserForm";
-
+import UrlPath from "../../providers/UrlPath";
+import TableRowByStreetAddress from "../../components/Table/TableRowByStreetAddress";
 
 test.beforeEach(async () => {
     await baseDriverSteps.createsNewBrowser(BrowsersEnum.Browser_1);
-    await baseDriverSteps.goToUrl(UrlProvider.mainPageUrl());
+    await baseDriverSteps.goToUrl(UrlProvider.homePageUrl());
 });
 
 test("Test example", async () => {
-    await mainPageSteps.clickLastEditUserButton();
-    await mainPageSteps.clickLogo();
+    await homePageSteps.clickAddUserButton();
+    await homePageSteps.checkLogo();
 });
 
 test("Test example with 2 browsers and 2 pages", async () => {
     await baseDriverSteps.createsNewBrowser(BrowsersEnum.Browser_2);
-    await baseDriverSteps.goToUrl(UrlProvider.mainPageUrl());
+    await baseDriverSteps.goToUrl(UrlProvider.homePageUrl());
 
-    await mainPageSteps.clickLastEditUserButton();
+    await homePageSteps.checkLogo();
 
     await baseDriverSteps.createNewPage();
-    await baseDriverSteps.goToUrl(UrlProvider.addUserPageUrl());
+    await baseDriverSteps.goToUrl(UrlProvider.urlBuilder(UrlPath.AddUser));
 
     await addUserPageSteps.fillUserNameInput("testName");
-    await addUserPageSteps.clickCancelButton();
+    await addUserPageSteps.clickCreateButton()
+    await addUserPageSteps.checkYearInputValidationMessage("Year of Birth is requried")
 
     await baseDriverSteps.switchToBrowser(BrowsersEnum.Browser_1);
     await baseDriverSteps.closeBrowser();
 });
 
 test("Test example with components", async () => {
-    await baseDriverSteps.goToUrl(UrlProvider.addUserPageUrl());
-    await buttonSteps.clickButton(ButtonByDataId, ActionButtons.cancel);
+    await baseDriverSteps.goToUrl(UrlProvider.urlBuilder(UrlPath.AddUser));
+    await buttonSteps.clickButton(ButtonByDataId, Buttons.Cancel);
 
-    let tableComponent = await driver.component(TableByDataId, MainTable.UsersTable);
-    await buttonSteps.clickLastButton(ButtonByDataId, MainTableButtons.editButton, tableComponent);
-    await buttonSteps.clickButton(ButtonByDataId, ActionButtons.cancel)
+    let tableComponent = await driver.component(TableByDataId, UsersAndAddressesTable.AddressesTable);
+    let tableRow = await driver.component(TableRowByStreetAddress, "178 Broadway", tableComponent);
+    await buttonSteps.clickButton(ButtonByDataId, Buttons.Delete, tableRow)
+
 });
 
 test("Test example with testIdAttribute", async () => {
-    await baseDriverSteps.goToUrl(UrlProvider.addUserPageUrl());
+    await baseDriverSteps.goToUrl(UrlProvider.urlBuilder(UrlPath.AddUser));
 
-    await driver.getByTestId(ActionButtons.create).click();
-    await expect(driver.getByTestId(AddUserForm.nameValidationMessage)).toHaveText("Name is requried");
-    await driver.getByTestId(ActionButtons.cancel).click();
+    await driver.getByTestId(Buttons.Create).click();
+    await expect(driver.getByTestId(AddUserForm.NameValidationMessage)).toHaveText("Name is requried");
+    await driver.getByTestId(Buttons.Cancel).click();
 
-    await driver.getByTestId(MainTableButtons.deleteButton).last().click();
-    await driver.getByTestId(ActionButtons.cancel).click();
+    await expect(driver.getByTestId(Buttons.Delete).last()).toHaveCSS('background-color', 'rgb(220, 53, 69)');
 
-    await driver.getByTestId(MainTableButtons.editButton).nth(0).click();
-    await driver.getByTestId(ActionButtons.cancel).click();
+    await driver.getByTestId(Buttons.Edit).nth(0).click();
+    await driver.getByTestId(Buttons.Cancel).click();
+    
 });
 
 test.afterEach(async () => {

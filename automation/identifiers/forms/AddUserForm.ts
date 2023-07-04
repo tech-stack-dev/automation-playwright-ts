@@ -1,8 +1,8 @@
 export default class AddUserForm {
-	static selector = 'select-Gender';
-	static nameInput = 'input-UserName';
-	static yearInput = 'input-YearOfBirth';
+	static Selector = 'select-Gender';
+	static NameInput = 'input-UserName';
+	static YearInput = 'input-YearOfBirth';
 
-	static nameValidationMessage = 'inputError-UserName';
-	static yearValidationMessage = 'inputError-YearOfBirth';
+	static NameValidationMessage = 'inputError-UserName';
+	static YearValidationMessage = 'inputError-YearOfBirth';
 }

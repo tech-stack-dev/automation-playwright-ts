@@ -8,11 +8,11 @@ import { buttonSteps } from "../../steps/components/Button/ButtonSteps";
 import { homePageSteps } from "../../steps/ui/HomePageSteps";
 import { addUserPageSteps } from "../../steps/ui/AddUserPageSteps";
 import Buttons from "../../identifiers/buttons/Buttons";
-import TableByDataId from "../../components/Table/TableByDataId";
-import UsersAndAddressesTable from "../../identifiers/tables/UsersAndAddressesTable";
 import AddUserForm from "../../identifiers/forms/AddUserForm";
 import UrlPath from "../../providers/UrlPath";
-import TableRowByStreetAddress from "../../components/Table/TableRowByStreetAddress";
+import FormByRole from "../../components/Form/FormByRole";
+import TextFieldById from "../../components/Form/TextFieldById";
+import { formSteps } from "../../steps/components/Button/FormSteps";
 
 test.beforeEach(async () => {
     await baseDriverSteps.createsNewBrowser(BrowsersEnum.Browser_1);
@@ -21,6 +21,7 @@ test.beforeEach(async () => {
 
 test("Test example", async () => {
     await homePageSteps.clickAddUserButton();
+    await addUserPageSteps.clickCancelButton();
     await homePageSteps.checkLogo();
 });
 
@@ -34,8 +35,8 @@ test("Test example with 2 browsers and 2 pages", async () => {
     await baseDriverSteps.goToUrl(UrlProvider.urlBuilder(UrlPath.AddUser));
 
     await addUserPageSteps.fillUserNameInput("testName");
-    await addUserPageSteps.clickCreateButton()
-    await addUserPageSteps.checkYearInputValidationMessage("Year of Birth is requried")
+    await addUserPageSteps.clickCreateButton();
+    await addUserPageSteps.checkYearInputValidationMessage("Year of Birth is requried");
 
     await baseDriverSteps.switchToBrowser(BrowsersEnum.Browser_1);
     await baseDriverSteps.closeBrowser();
@@ -43,12 +44,13 @@ test("Test example with 2 browsers and 2 pages", async () => {
 
 test("Test example with components", async () => {
     await baseDriverSteps.goToUrl(UrlProvider.urlBuilder(UrlPath.AddUser));
+
+    let addUserForm = await driver.component(FormByRole, "main");
+
+    await formSteps.fillTextField("testData", TextFieldById, "inputUserName", addUserForm);
+    await formSteps.fillTextField("1900", TextFieldById, "inputYearOfBirth", addUserForm);
+
     await buttonSteps.clickButton(ButtonByDataId, Buttons.Cancel);
-
-    let tableComponent = await driver.component(TableByDataId, UsersAndAddressesTable.AddressesTable);
-    let tableRow = await driver.component(TableRowByStreetAddress, "178 Broadway", tableComponent);
-    await buttonSteps.clickButton(ButtonByDataId, Buttons.Delete, tableRow)
-
 });
 
 test("Test example with testIdAttribute", async () => {

@@ -4,22 +4,19 @@ import AddUserPage from "../../pages/AddUserPage";
 
 class AddUserPageSteps {
     public async fillUserNameInput(userName: string) {
-        await (await driver.getPage(AddUserPage))
-            .userNameInput()
-            .fill(userName);
+        await driver.getPage(AddUserPage).userNameInput.fill(userName);
     }
 
     public async checkYearInputValidationMessage(message: string) {
-        await expect((await driver.getPage(AddUserPage))
-            .yearInputValidationMessage()).toHaveText(message);
+        await expect(driver.getPage(AddUserPage).yearInputValidationMessage).toHaveText(message);
     }
 
     public async clickCancelButton() {
-        await (await driver.getPage(AddUserPage)).cancelButton().click();
+        await driver.getPage(AddUserPage).cancelButton.click();
     }
 
     public async clickCreateButton() {
-        await (await driver.getPage(AddUserPage)).createButton().click();
+        await driver.getPage(AddUserPage).createButton.click();
     }
 }
 

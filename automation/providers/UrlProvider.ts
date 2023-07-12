@@ -1,27 +1,29 @@
 import { ClientsEnum } from "../base/client/ClientsEnum";
+import appsetting from "../../appsetting.json";
+import UrlPath from "./UrlPath";
 
 export default class UrlProvider {
-    public static webSiteUrl(): string {
-        return <string>process.env.WEB_SITE_URL;
+    public static homePageUrl(): string {
+        return appsetting.MainPageUrl;
     }
 
-    public static careerUrl(): string{
-        return <string>process.env.CAREER_URL;
+    public static urlBuilder(urlPath: UrlPath): string {
+        return `${this.homePageUrl()}${urlPath}`;
     }
 
     public static clientUrl(clientName: ClientsEnum): string {
         switch (clientName) {
             case ClientsEnum.Client_1: {
-                return <string>process.env.CLIENT_1_URL;
+                return appsetting.Client_1_Url;
             }
-            case ClientsEnum.Client_1: {
-                return <string>process.env.CLIENT_2_URL;
+            case ClientsEnum.Client_2: {
+                return appsetting.Client_1_Url;
             }
-            case ClientsEnum.Client_1: {
-                return <string>process.env.CLIENT_3_URL;
+            case ClientsEnum.Client_3: {
+                return appsetting.Client_1_Url;
             }
             default: {
-                throw Error(`Unable to generate client URL for '${clientName}' brand`)
+                throw Error(`Unable to generate client URL for '${clientName}' brand`);
             }
         }
     }

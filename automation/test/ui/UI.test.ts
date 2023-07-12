@@ -1,57 +1,71 @@
-import { test } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { BrowsersEnum } from "../../base/driver/BrowsersEnum";
 import { driver } from "../../base/driver/Driver";
 import { baseDriverSteps } from "../../base/step/BaseDriverSteps";
-import ButtonById from "../../components/Button/ButtonById";
-import ModalWindowById from "../../components/ModalWindow/ModalWindowById";
-import Header from "../../identifiers/Header";
-import ModalMenu from "../../identifiers/ModalMenu";
-import NavigationTab from "../../identifiers/NavigationTab";
+import ButtonByDataId from "../../components/Button/ButtonByDataId";
 import UrlProvider from "../../providers/UrlProvider";
 import { buttonSteps } from "../../steps/components/Button/ButtonSteps";
-import { menuPageSteps } from "../../steps/ui/MenuPageSteps";
+import { homePageSteps } from "../../steps/ui/HomePageSteps";
+import { addUserPageSteps } from "../../steps/ui/AddUserPageSteps";
+import Buttons from "../../identifiers/buttons/Buttons";
+import AddUserForm from "../../identifiers/forms/AddUserForm";
+import UrlPath from "../../providers/UrlPath";
+import FormByRole from "../../components/Form/FormByRole";
+import TextFieldById from "../../components/Form/TextFieldById";
+import { formSteps } from "../../steps/components/Button/FormSteps";
 
 test.beforeEach(async () => {
     await baseDriverSteps.createsNewBrowser(BrowsersEnum.Browser_1);
-    await baseDriverSteps.goToUrl(UrlProvider.webSiteUrl());
+    await baseDriverSteps.goToUrl(UrlProvider.homePageUrl());
 });
 
 test("Test example", async () => {
-    await menuPageSteps.openAndClosesMenu();
-    await menuPageSteps.seeLogo();
+    await homePageSteps.clickAddUserButton();
+    await addUserPageSteps.clickCancelButton();
+    await homePageSteps.checkLogo();
 });
 
 test("Test example with 2 browsers and 2 pages", async () => {
     await baseDriverSteps.createsNewBrowser(BrowsersEnum.Browser_2);
-    await baseDriverSteps.goToUrl(UrlProvider.webSiteUrl());
+    await baseDriverSteps.goToUrl(UrlProvider.homePageUrl());
 
-    await menuPageSteps.openAndClosesMenu();
+    await homePageSteps.checkLogo();
 
     await baseDriverSteps.createNewPage();
-    await baseDriverSteps.goToUrl(UrlProvider.webSiteUrl());
+    await baseDriverSteps.goToUrl(UrlProvider.urlBuilder(UrlPath.AddUser));
 
-    await menuPageSteps.clickContactUsButton();
+    await addUserPageSteps.fillUserNameInput("testName");
+    await addUserPageSteps.clickCreateButton();
+    await addUserPageSteps.checkYearInputValidationMessage("Year of Birth is requried");
 
     await baseDriverSteps.switchToBrowser(BrowsersEnum.Browser_1);
     await baseDriverSteps.closeBrowser();
 });
 
 test("Test example with components", async () => {
-    await buttonSteps.clickButton(ButtonById, Header.MenuButton);
-    
-    let modalMenuComponent = await driver.component(ModalWindowById, ModalMenu.ModalMenu);
-    await buttonSteps.clickButton(ButtonById, ModalMenu.CloseModalMenuButton, modalMenuComponent);
+    await baseDriverSteps.goToUrl(UrlProvider.urlBuilder(UrlPath.AddUser));
+
+    let addUserForm = await driver.component(FormByRole, "main");
+
+    await formSteps.fillTextField("testData", TextFieldById, "inputUserName", addUserForm);
+    await formSteps.fillTextField("1900", TextFieldById, "inputYearOfBirth", addUserForm);
+
+    await buttonSteps.clickButton(ButtonByDataId, Buttons.Cancel);
 });
 
 test("Test example with testIdAttribute", async () => {
-    await baseDriverSteps.goToUrl(UrlProvider.careerUrl());
+    await baseDriverSteps.goToUrl(UrlProvider.urlBuilder(UrlPath.AddUser));
 
-    await driver.getByTestId(NavigationTab.AboutUs).nth(0).click();
-    await driver.getByTestId(NavigationTab.Reviews).nth(0).click();
-    await driver.getByTestId(NavigationTab.ContactUs).nth(0).click();
-    await driver.getByTestId(NavigationTab.Jobs).nth(0).click();
+    await driver.getByTestId(Buttons.Create).click();
+    await expect(driver.getByTestId(AddUserForm.NameValidationMessage)).toHaveText("Name is requried");
+    await driver.getByTestId(Buttons.Cancel).click();
+
+    await expect(driver.getByTestId(Buttons.Delete).last()).toHaveCSS("background-color", "rgb(220, 53, 69)");
+
+    await driver.getByTestId(Buttons.Edit).nth(0).click();
+    await driver.getByTestId(Buttons.Cancel).click();
 });
 
 test.afterEach(async () => {
     await driver.closeDrivers();
-})
+});

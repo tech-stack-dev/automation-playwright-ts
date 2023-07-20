@@ -2,7 +2,7 @@ import { expect, test } from "@playwright/test";
 import { BrowsersEnum } from "../../base/driver/BrowsersEnum";
 import { driver } from "../../base/driver/Driver";
 import { baseDriverSteps } from "../../base/step/BaseDriverSteps";
-import ButtonByDataId from "../../components/Button/ButtonByDataId";
+import ButtonByDataTestId from "../../components/Button/ButtonByDataTestId";
 import UrlProvider from "../../providers/UrlProvider";
 import { buttonSteps } from "../../steps/components/Button/ButtonSteps";
 import { homePageSteps } from "../../steps/ui/HomePageSteps";
@@ -50,7 +50,7 @@ test("Test example with components", async () => {
     await formSteps.fillTextField("testData", TextFieldById, "inputUserName", addUserForm);
     await formSteps.fillTextField("1900", TextFieldById, "inputYearOfBirth", addUserForm);
 
-    await buttonSteps.clickButton(ButtonByDataId, Buttons.Cancel);
+    await buttonSteps.clickButton(ButtonByDataTestId, Buttons.Cancel);
 });
 
 test("Test example with testIdAttribute", async () => {

@@ -4,7 +4,7 @@ import { Locator } from "playwright-core";
 export default class AddUserPage extends BasePage {
     public userNameInput: Locator = this.page.locator("//input[@id='inputUserName']");
 
-    public yearInputValidationMessage: Locator = this.page.locator("//span[@data-id='inputError-YearOfBirth']");
+    public yearInputValidationMessage: Locator = this.page.locator("//span[@data-testid='inputError-YearOfBirth']");
 
     public cancelButton: Locator = this.page.locator("//a[contains(@class, 'btn btn-secondary')]");
 

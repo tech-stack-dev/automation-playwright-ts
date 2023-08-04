@@ -14,6 +14,13 @@ import FormByRole from "../../components/Form/FormByRole";
 import TextFieldById from "../../components/Form/TextFieldById";
 import { formSteps } from "../../steps/components/Button/FormSteps";
 
+test.beforeAll(async () => {
+    await driver.executeFunc(async () => {
+        await baseDriverSteps.createsNewBrowserAndGoToUrl(UrlProvider.homePageUrl(), BrowsersEnum.Browser_1);
+        await driver.Page.waitForLoadState();
+    }, 2);
+});
+
 test.beforeEach(async () => {
     await baseDriverSteps.createsNewBrowser(BrowsersEnum.Browser_1);
     await baseDriverSteps.goToUrl(UrlProvider.homePageUrl());

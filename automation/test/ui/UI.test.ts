@@ -18,7 +18,7 @@ test.beforeAll(async () => {
     await driver.executeFunc(async () => {
         await baseDriverSteps.createsNewBrowserAndGoToUrl(UrlProvider.homePageUrl(), BrowsersEnum.Browser_1);
         await driver.Page.waitForLoadState();
-    }, 2);
+    }, 3);
 });
 
 test.beforeEach(async () => {

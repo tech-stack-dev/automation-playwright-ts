@@ -98,19 +98,19 @@ export default class BaseDriver {
         return new type(BaseDriver.focusedDriver.Page);
     }
 
-    public async executeFunc(func: any, attepmts: number) {
-        let message = "";
-        for (let i = 0; i < attepmts; i++) {
+    public async executeFunc(func: any, attempts: number) {
+        let error = null;
+        for (let i = 0; i < attempts; i++) {
             try {
                 await func();
                 return;
             } catch (err) {
                 console.log(`${i + 1} attempt to execute ${func.name}`);
-                message = err;
+                error = err;
             }
         }
-        if (!(message === "")) {
-            throw new Error(message);
+        if (!(error === null)) {
+            throw new Error(error);
         }
     }
 }

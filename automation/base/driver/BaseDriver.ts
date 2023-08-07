@@ -109,8 +109,8 @@ export default class BaseDriver {
                 error = err;
             }
         }
-        if (!(error === null)) {
-            throw new Error(error);
+        if (error) {
+            throw error;
         }
     }
 }

@@ -1,6 +1,6 @@
-import { BrowserContext, Locator, Page } from '@playwright/test';
-import BaseComponent from '../component/BaseComponent';
-import { BrowsersEnum } from './BrowsersEnum';
+import { BrowserContext, Locator, Page } from "@playwright/test";
+import BaseComponent from "../component/BaseComponent";
+import { BrowsersEnum } from "./BrowsersEnum";
 
 export default class BaseDriver {
     public static focusedDriver: BaseDriver;
@@ -65,15 +65,18 @@ export default class BaseDriver {
         BaseDriver.focusedDriver._args = args;
     }
 
-    public async component<T extends BaseComponent>(type: { new(page: Page, identifier: string, parent: Locator | undefined): T; }, identifier: string, parent?: Locator): Promise<T> {
+    public async component<T extends BaseComponent>(
+        type: { new (page: Page, identifier: string, parent: Locator | undefined): T },
+        identifier: string,
+        parent?: Locator
+    ): Promise<T> {
         return await this.componentBuild(new type(BaseDriver.focusedDriver.Page, identifier, parent));
     }
 
     private async componentBuild<T extends BaseComponent>(component: T): Promise<T> {
         if (component.Parent) {
             component.Element = component.Parent.locator(`xpath=${component.ComponentContext}`);
-        }
-        else {
+        } else {
             component.Element = component.Page.locator(`xpath=${component.ComponentContext}`);
         }
         return component;
@@ -82,8 +85,7 @@ export default class BaseDriver {
     public locator(selector: string, baseElement?: Locator): Locator {
         if (baseElement) {
             return baseElement.locator(selector);
-        }
-        else {
+        } else {
             return BaseDriver.focusedDriver.Page.locator(selector);
         }
     }
@@ -92,7 +94,24 @@ export default class BaseDriver {
         return this.Page.getByTestId(testId);
     }
 
-    public getPage<T>(type: { new(page: Page): T; }) {
+    public getPage<T>(type: { new (page: Page): T }) {
         return new type(BaseDriver.focusedDriver.Page);
+    }
+
+    public async executeFunc(func: any, attempts: number) {
+        let error = null;
+        for (let i = 0; i < attempts; i++) {
+            try {
+                await func();
+                return;
+            } catch (err) {
+                console.log(`${i + 1} attempt to execute ${func.name}`);
+                error = err;
+            }
+        }
+
+        if (error) {
+            throw error;
+        }
     }
 }

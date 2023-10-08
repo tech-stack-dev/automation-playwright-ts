@@ -47,8 +47,8 @@ test("Test example with components", async () => {
 
     let addUserForm = await driver.component(FormByRole, "main");
 
-    await formSteps.fillTextField("testData", TextFieldById, "inputUserName", addUserForm);
-    await formSteps.fillTextField("1900", TextFieldById, "inputYearOfBirth", addUserForm);
+    await formSteps.fillTextField("testData", TextFieldById, "inputUserName", addUserForm.Element);
+    await formSteps.fillTextField("1900", TextFieldById, "inputYearOfBirth", addUserForm.Element);
 
     await buttonSteps.clickButton(ButtonByDataTestId, Buttons.Cancel);
 });

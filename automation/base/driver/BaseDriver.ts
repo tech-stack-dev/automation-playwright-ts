@@ -1,4 +1,4 @@
-import { BrowserContext, Locator, Page } from '@playwright/test';
+import { Browser, BrowserContext, Locator, Page } from '@playwright/test';
 import BaseComponent from '../component/BaseComponent';
 import { BrowsersEnum } from './BrowsersEnum';
 
@@ -10,6 +10,8 @@ export default class BaseDriver {
     private _page: Page;
     private _listOfPages: Page[] = [];
     private _driverName: BrowsersEnum;
+
+    public browser: Browser;
 
     public get DriverContext(): BrowserContext {
         return BaseDriver.focusedDriver._driverContext;
@@ -63,6 +65,10 @@ export default class BaseDriver {
 
     public set Args(args: string[]) {
         BaseDriver.focusedDriver._args = args;
+    }
+
+    public async close() {
+        await BaseDriver.focusedDriver.browser.close();
     }
 
     public async component<T extends BaseComponent>(type: { new(page: Page, identifier: string, parent: Locator | undefined): T; }, identifier: string, parent?: Locator): Promise<T> {

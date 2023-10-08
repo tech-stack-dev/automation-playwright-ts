@@ -7,6 +7,11 @@ class BaseDriverSteps {
         await driver.createBrowser(browserName);
     }
 
+    public async createsNewBrowserAndGoToUrl(url: string, browserName: BrowsersEnum) {
+        await driver.createBrowser(browserName);
+        await this.goToUrl(url);
+    }
+
     public async createNewPage() {
         let newPage = await driver.DriverContext.newPage();
         driver.Page = newPage;
@@ -14,7 +19,7 @@ class BaseDriverSteps {
     }
 
     public async switchToBrowser(browserName: BrowsersEnum) {
-        BaseDriver.focusedDriver = BaseDriver.listOfDrivers.find(x => x.DriverName === browserName)!;
+        BaseDriver.focusedDriver = BaseDriver.listOfDrivers.find((x) => x.DriverName === browserName)!;
     }
 
     public async switchToBrowserTab(tabNumber: number) {

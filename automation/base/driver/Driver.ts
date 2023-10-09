@@ -8,15 +8,15 @@ class Driver extends BaseDriver {
     private headless: boolean = true;
 
     public async createBrowser(browserName: BrowsersEnum) {
-        BaseDriver.focusedDriver = new BaseDriver();
+        BaseDriver.focusedDriver = new Driver();
 
-        if (driver.browser === undefined) {
+        if (BaseDriver.focusedDriver.browser === undefined) {
             // Uncomment if List of Chromium Commands needed
-            driver.browser = await chromium.launch({ headless: this.headless /*, args: driver.driver.args*/ });
+            BaseDriver.focusedDriver.browser = await chromium.launch({ headless: this.headless /*, args: driver.driver.args*/ });
         }
 
         BaseDriver.focusedDriver.DriverName = browserName;
-        BaseDriver.focusedDriver.DriverContext = await driver.browser.newContext();
+        BaseDriver.focusedDriver.DriverContext = await BaseDriver.focusedDriver.browser.newContext();
         // Uncomment if permissions needed
         // await driver.driver.context.grantPermissions(driver.driver.permissions);
         BaseDriver.focusedDriver.Page = await BaseDriver.focusedDriver.DriverContext.newPage();
@@ -29,7 +29,18 @@ class Driver extends BaseDriver {
     public async closeDrivers() {
         for (let driverToClose of BaseDriver.listOfDrivers) {
             BaseDriver.focusedDriver = driverToClose;
-            await this.DriverContext.close();
+
+            try {
+                await this.DriverContext.close();
+            }
+            catch (error) {
+                console.error(`An error occurred while closing the browser context'${driverToClose}':`, error);
+            }
+            try {
+                await this.close();
+            } catch (error) {
+                console.error(`An error occurred while closing browser'${driverToClose}':`, error);
+            }
         }
 
         BaseDriver.listOfDrivers = [];

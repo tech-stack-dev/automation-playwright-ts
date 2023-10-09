@@ -53,9 +53,8 @@ test("Test example with components", async () => {
     await baseDriverSteps.goToUrl(UrlProvider.urlBuilder(UrlPath.AddUser));
 
     let addUserForm = await driver.component(FormByRole, "main");
-
-    await formSteps.fillTextField("testData", TextFieldById, "inputUserName", addUserForm);
-    await formSteps.fillTextField("1900", TextFieldById, "inputYearOfBirth", addUserForm);
+    await formSteps.fillTextField("testData", TextFieldById, "inputUserName", addUserForm.Element);
+    await formSteps.fillTextField("1900", TextFieldById, "inputYearOfBirth", addUserForm.Element);
 
     await buttonSteps.clickButton(ButtonByDataTestId, Buttons.Cancel);
 });
@@ -64,7 +63,9 @@ test("Test example with testIdAttribute", async () => {
     await baseDriverSteps.goToUrl(UrlProvider.urlBuilder(UrlPath.AddUser));
 
     await driver.getByTestId(Buttons.Create).click();
+
     await expect(driver.getByTestId(AddUserForm.NameValidationMessage)).toHaveText("Name is requried");
+    
     await driver.getByTestId(Buttons.Cancel).click();
 
     await expect(driver.getByTestId(Buttons.Delete).last()).toHaveCSS("background-color", "rgb(220, 53, 69)");

@@ -53,7 +53,6 @@ test("Test example with components", async () => {
     await baseDriverSteps.goToUrl(UrlProvider.urlBuilder(UrlPath.AddUser));
 
     let addUserForm = await driver.component(FormByRole, "main");
-
     await formSteps.fillTextField("testData", TextFieldById, "inputUserName", addUserForm.Element);
     await formSteps.fillTextField("1900", TextFieldById, "inputYearOfBirth", addUserForm.Element);
 

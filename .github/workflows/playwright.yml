@@ -11,11 +11,13 @@ on:
 jobs:
   tests_e2e:
     name: UI and API tests
-    runs-on: ubuntu-latest
+    # TEMP: Pin to ubuntu-22.04 because Playwright --with-deps fails on ubuntu-24.04
+    # TODO: Change back to 'ubuntu-latest' once Playwright fixes Ubuntu 24.04 support
+    runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v4
       
       - name: Install dependencies
         run: npm ci
@@ -39,7 +41,7 @@ jobs:
             MSG_MINIMAL: true
             SLACK_FOOTER: boilerplate
         
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always()
         with:
             name: playwright-report

@@ -1,6 +1,6 @@
 export interface UserDto {
-    name: string;
-    job: string;
-    id?: string;
-    createdAt?: Date;
+    title: string;
+    body: string;
+    userId: number;
+    id?: number; // JSONPlaceholder returns a fake id like 101
 }

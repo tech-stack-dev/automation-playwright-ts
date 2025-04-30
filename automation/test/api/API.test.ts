@@ -15,15 +15,23 @@ test("Api test GET", async () => {
 });
 
 test("Api test POST", async () => {
-    userDtoVariable.value = {
+    // Original request payload
+    const originalData = {
         title: "morpheus",
         body: "leader",
         userId: 1
     };
 
-    let requestOptions: RequestOptions = new RequestOptions();
+    // Deep copy to ensure reference object remains unchanged throughout the test
+    const expectedData = JSON.parse(JSON.stringify(originalData));
+
+    userDtoVariable.value = originalData;
+
+    const requestOptions: RequestOptions = new RequestOptions();
     requestOptions.data = userDtoVariable.value;
 
     await apiSteps.executePostRequest("/posts", requestOptions, 201);
-    await apiSteps.checkPropertyValue("title", "morpheus");
+
+    // We validate the response against the deep copy to avoid accidental changes during the test
+    await apiSteps.checkPropertyValue("title", expectedData.title);
 });

@@ -17,7 +17,7 @@ import { formSteps } from "../../steps/components/Button/FormSteps";
 test.beforeAll(async () => {
     // Generic setup for all tests
     // This is where you can initialize any global variables or configurations
-    // Configurad object must be guarded from unwanted changes as this affect all tests
+    // Configured object must be guarded from unwanted changes as this affects all tests
     console.log("Base test URL:", UrlProvider.homePageUrl());
 });
 

@@ -3,7 +3,7 @@ import { executeGetPostsByIdRequest, executePostPostsRequest } from "../../utils
 import { PostDto } from "../../dto/PostDto";
 import { generatePost } from "../../factory/generatePost";
 
-test("GET post by id test", async () => {
+test("GET /posts/{postId} should return post details", async () => {
     const postId = 1;
     const response = await executeGetPostsByIdRequest(postId);
 
@@ -11,8 +11,10 @@ test("GET post by id test", async () => {
     expect(response.data.id).toBe(postId);
 });
 
-test("POST post test", async () => {
-    const post: PostDto = generatePost({ userId: 1 });
+test("POST /posts should create a new post", async () => {
+    // manually set userId to demonstrate custom value injection in object generation
+    const userId = 1;
+    const post: PostDto = generatePost({ userId: userId });
 
     const response = await executePostPostsRequest(post);
 

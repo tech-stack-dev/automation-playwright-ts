@@ -1,37 +1,27 @@
-import { test } from "@playwright/test";
-import { userDtoVariable } from "../../runtimeVariables/dto/UserDtoVariable";
-import { ClientsEnum } from "../../base/client/ClientsEnum";
-import RequestOptions from "../../base/client/RequestOptions";
-import { apiSteps } from "../../steps/api/ApiSteps";
-import { baseApiSteps } from "../../base/step/BaseApiSteps";
+import { expect, test } from "@playwright/test";
+import { executeGetPostsByIdRequest, executePostPostsRequest } from "../../utils/api/posts.api-utils";
+import { PostDto } from "../../dto/PostDto";
+import { generatePost } from "../../factory/generatePost";
 
-test.beforeEach(async () => {
-    await baseApiSteps.createClient(ClientsEnum.Client_1);
+test("GET /posts/{postId} should return post details", async () => {
+    const postId = 1;
+    const response = await executeGetPostsByIdRequest(postId);
+
+    expect(response.status).toBe(200);
+    expect(response.data.id).toBe(postId);
 });
 
-test("Api test GET", async () => {
-    await apiSteps.executeGetRequest("/posts/2")
-    await apiSteps.checkPropertyValue("id", 2);
-});
+test("POST /posts should create a new post", async () => {
+    // manually set userId to demonstrate custom value injection in object generation
+    const userId = 1;
+    const post: PostDto = generatePost({ userId: userId });
 
-test("Api test POST", async () => {
-    // Original request payload
-    const originalData = {
-        title: "morpheus",
-        body: "leader",
-        userId: 1
-    };
+    const response = await executePostPostsRequest(post);
 
-    // Deep copy to ensure reference object remains unchanged throughout the test
-    const expectedData = JSON.parse(JSON.stringify(originalData));
-
-    userDtoVariable.value = originalData;
-
-    const requestOptions: RequestOptions = new RequestOptions();
-    requestOptions.data = userDtoVariable.value;
-
-    await apiSteps.executePostRequest("/posts", requestOptions, 201);
-
-    // We validate the response against the deep copy to avoid accidental changes during the test
-    await apiSteps.checkPropertyValue("title", expectedData.title);
+    expect(response.status).toBe(201);
+    expect(response.data).toMatchObject({
+        title: post.title,
+        body: post.body,
+        userId: post.userId,
+    });
 });

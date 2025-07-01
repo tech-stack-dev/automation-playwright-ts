@@ -1,4 +1,4 @@
-export interface UserDto {
+export interface PostDto {
     title: string;
     body: string;
     userId: number;
